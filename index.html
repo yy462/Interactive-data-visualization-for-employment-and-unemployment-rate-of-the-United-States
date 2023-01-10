@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Info5100 Project3</title>
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <script src="https://d3js.org/topojson.v3.min.js"></script>
+    </head>
+    <style>
+        body{
+            width:90%;
+            margin:auto;
+            font-family: Helvetica, Arial, sans-serif;
+            color:#575757;
+        }
+        h1 {
+            text-align: center;
+        }
+        p{
+            font-size: 18px;
+        }
+
+        button {
+            height: 38px;
+            padding: 0 30px;
+            margin: 0 10px 10px 0;
+            color: #000;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            line-height: 38px;
+            letter-spacing: .1rem;
+            text-transform: uppercase;
+            background-color: transparent;
+            border-radius: 4px;
+            border: 1px solid #bbb;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        button:hover{
+            background:#000;
+            color:#fff;
+        }
+
+        .container:not(:first-child){
+            margin:4em 0;
+        }
+        .center{
+            margin:auto;
+            display:block;
+        }
+        /* -------------------------Map----------------------------- */
+        .outline {
+            stroke: rgb(146, 146, 146);
+            stroke-width: 1px;
+            fill: none;
+        }
+
+        .graticule {
+            fill: none;
+            stroke: #898d9f;
+            stroke-width: 0.3px;
+        }
+
+        .tooltip {
+            pointer-events: none;
+        }
+        #map_legend{
+            margin-top: 1em;
+        }
+        .label{
+            font-size: 15px;
+        }
+        #button-bar{
+            display:grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        }
+        #button-bar button{
+            white-space:nowrap
+        }
+        /* -------------------------End of Map----------------------------- */
+        
+        /* -------------------------Sectors Grid----------------------------- */
+        .sectorLegend{
+            font-size:8px
+        }
+        .axis .domain,
+        .sector-axis .domain,
+        .bar-axis .domain{
+            stroke: none;
+        }
+        .sector-grid{
+            opacity: 0.1;
+        }
+        .sector-grid-label{
+        font-size: 15px;
+        }
+        .changeCol{
+            z-index: -1;
+        }
+        .sectorSublabel,
+        .sectorTitlelabel{
+            font-size: 12px;
+        }
+
+        .sectorTitlelabel{
+            font-weight: 800;
+        }
+       .change-bar-label{
+            font-size: 12px;
+       }
+
+       .sector-name-label,
+       .sector-num-label{
+            font-size: 12px;
+       }
+       /* -------------------------End of Sectors Grid----------------------------- */
+
+       /* -------------------------Racing Sectors----------------------------- */
+       .bar-grid{
+            opacity: 0.3;
+        }
+       
+       .bar-axis-label{
+            font-size: 15px;
+       }
+
+       .compete-container{
+            margin:2em auto;
+            width:fit-content;
+       }
+        
+       .compete{
+            justify-content: center;
+           display:flex;
+           align-items:flex-end;
+       }
+       .sector-compete-panel{
+            margin-top:5em;
+            margin:5em 0 0 2em;
+            padding: 1em;
+            height:fit-content;
+       }
+       .sector-compete-panel p{
+            align-content: center;
+            margin-top: 0;
+       }
+       #sector-compete-btn{
+            display:grid;
+            grid-template-columns: 1fr;
+            column-gap: 0.5em;
+            row-gap: 0.5em;
+       }
+       /* -------------------------End of Racing Sectors----------------------------- */
+
+       /* -------------------------Job Number----------------------------- */
+       .sectorLineChart{
+        display: flex;
+       }
+       #label-sector{
+          font-weight: bold;
+       }
+        .job-label{
+           font-size: 15px;
+        }
+        #label-sector,
+        #label-value,
+        #label-date{
+                font-size: 15px;
+        }
+        .sectorLine-legend{
+            font-size: 15px;
+        }
+       /* -------------------------End of Job Number----------------------------- */
+
+       /* -------------------------Gender line chart----------------------------- */
+       .lineLegend{
+        font-size: 15px;
+       }
+       #gender-label{
+        font-size: 15px;
+       }
+       .line-button-bar{
+        margin:auto;
+        width:fit-content;
+        display: block;
+       }
+       /* -------------------------End of Gender line chart----------------------------- */
+
+    </style>
+
+    <body>
+        <h1>Project3</h1>
+        <h6>
+            Team member: Yunqin Wang(yw652), Ying Zhang(yz2249), Yu Yang(yy462),
+            Jiaxin Li(jl3579), Peter Huang (mh2289)
+        </h6>
+
+        <div class="container">
+            <h3>Job Gains and Losses of each Sector</h3>
+            <p>
+                Track the rises and falls of jobs provided in each sector in the past
+                two decades. It might give indications about the development of the job
+                market in the states.<br />
+                The boxes are colored by the change in number of jobs.
+            </p>
+            <svg id="sectorGrid" width="1550" height="420"></svg>
+        </div>
+        <div class="container">                
+            <p >Sector Ranking based on the monthly change of job provided</p>
+            <div class="compete">
+                <svg  id="sectorCompete" width="1000" height="500"></svg>
+                <div class="sector-compete-panel">
+                    <p>Switch to:</p>
+                    <div id="sector-compete-btn">
+                    </div>
+                </div>
+            </div>
+            <script src="./sector-job-change.js"></script>
+        </div>
+
+        <div class="container">
+            <h3>Overall Trend: Total Jobs for Each Sector</h3>
+            <div>
+                <div id="button-bar"></div>
+                <div class="sectorLineChart">
+                    <svg  class="center" id="sectorLineChart" width="1100" height="500"></svg>
+                    <svg  class="center" id="sectorLineChartLegend" width="300" height="500"></svg>
+                </div>
+            </div>
+            <script src="./sector-total-jobs.js"></script>
+        </div>
+
+        <div class="container">
+            <h3>State unemployment rates in the US, October 2022, seasonally adjusted</h3>
+            <svg  class="center"  id="map" width="1200" height="500" 
+                style="background: rgb(247, 247, 247)"></svg>
+            <svg class="center" 
+                id="map_legend"
+                height="100"
+                width="600"
+            ></svg>
+            <script type="text/javascript" src="map_us.js"></script>
+        </div>
+
+        <div class="container">
+            <h3>State unemployment rates filtered by gender</h3>
+            <svg class="center" id="lineplot" width="900" height="300"></svg>
+            <div id="line-button-bar">Gender Filter:</div>
+            <script type="text/javascript" src="linechart.js"></script>
+        </div>
+    </body>
+</html>
